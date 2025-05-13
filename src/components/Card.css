@@ -1,0 +1,76 @@
+.card {
+    background-color: var(--branco);
+    border-radius: 16px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.titulo-card {
+    color: var(--cor-primaria);
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.professor-label {
+    color: var(--cor-clara);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.linha-separadora {
+    height: 1px;
+    background-color: #ccc;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.status {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.pendente {
+    color: var(--vermelho);
+}
+
+.entregue {
+    color: var(--verde);
+}
+
+.titulo-pendente,
+.titulo-entregue {
+    color: var(--cor-clara);
+}
+
+.card-footer {
+    background-color: var(--cor-primaria);
+    color: var(--cor-secundaria); 
+    padding: 16px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.card-footer:hover {
+    background-color: #001f5c; 
+}

@@ -1,0 +1,4 @@
+.container-notas {
+    background-color: var(--fundo-escuro);
+    min-height: 100vh;
+}

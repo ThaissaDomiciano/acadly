@@ -1,0 +1,68 @@
+.titulo-professor {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.form-turma {
+    margin-bottom: 24px;
+    display: flex;
+    gap: 10px;
+}
+
+.form-turma input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid var(--cor-divisor);
+    border-radius: 5px;
+    width: 100%;
+}
+
+.form-turma button {
+    background-color: var(--cor-primaria);
+    width: 170px;
+    color: var(--branco);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.subtitulo {
+    margin-bottom: 10px;
+    font-size: 25px;
+    color: var(--cor-clara);
+    text-align: center;
+}
+
+.turmas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.banner {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.titulo-professor {
+    font-size: 25px;
+    color: var(--cor-clara);
+    text-align: center;
+}
+
+.form-turma-container {
+    background-color: var(--branco);
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.titulo-turma {
+    font-size: 20px;
+    color: var(--cinza-escuro);
+    margin-bottom: 10px;
+}

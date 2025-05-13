@@ -1,0 +1,17 @@
+.titulo-aluno {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.subtitulo-aluno {
+    margin-bottom: 12px;
+    color: var(--cor-clara);
+    text-align: center;
+}
+
+.turmas-aluno {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
