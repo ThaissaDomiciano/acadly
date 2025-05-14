@@ -23,3 +23,10 @@ body {
     font-family: var(--fonte-principal);
     background-color: var(--cor-de-fundo);
 }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}

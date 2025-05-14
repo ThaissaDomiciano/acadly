@@ -29,8 +29,8 @@ const HomeAluno = () => {
             <Header 
               links={linksAluno}
             />
-             <img src={Banner} alt="Banner" className="banner" />
-             <h3 className="subtitulo-aluno">SUAS TURMAS</h3>
+                <img src={Banner} alt="Banner" className="banner" />
+             <h3 className="titulo-aluno">SUAS TURMAS</h3>
 
              <div className="turmas-aluno">
                 {turmas.map((turma, index) => (

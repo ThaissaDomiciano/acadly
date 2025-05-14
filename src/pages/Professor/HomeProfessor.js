@@ -45,7 +45,7 @@ const HomeProfessor = () => {
             <Header 
             links={linksProfessor}  
             />
-            <img src={Banner} alt="Banner" className="banner" />
+                <img src={Banner} alt="Banner" className="banner" />
             <h2 className="titulo-professor">CRIAR NOVA TURMA</h2>
             <div className="form-turma-container">
                 <h2 className="titulo-turma">NOME DA TURMA:</h2>
@@ -58,7 +58,7 @@ const HomeProfessor = () => {
                 <button onClick={adicionarTurma}>CRIAR</button>
             </div>
             </div>
-            <h3 className="subtitulo">TURMAS CRIADAS</h3>
+            <h3 className="subtitulo-professor">TURMAS CRIADAS</h3>
             <div className="turmas-container">
                 {turmas.map((turma, index) => (
                     <Card
