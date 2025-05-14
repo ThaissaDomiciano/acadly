@@ -24,7 +24,7 @@
     text-decoration: none;
     color: var(--cor-primaria);
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     margin-right: 12px;
 }
 
@@ -94,3 +94,12 @@
 .item-menu.sair {
   color: var(--vermelho);
 }
+
+a,
+button {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: none;
+}
+

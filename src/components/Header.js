@@ -1,24 +1,35 @@
 import './Header.css';
 import Logo from '../assets/logo-azul.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
-
-const Header = ({ links = [], onLogout, onVincular, nomeUsuario }) => {
+const Header = ({ links = [], onVincular, nomeUsuario }) => {
     const [menuAberto, setMenuAberto] = useState(false);
+    const navigate = useNavigate(); 
+
+    const handleLogout = () => {
+        localStorage.removeItem('authData'); 
+        navigate('/login'); 
+    };
 
     return (
         <header className="header">
             <img src={Logo} alt="Logo Acadly" className="logo-header" />
-           <nav className="nav">
+            <nav className="nav">
                 <ul className="list-header">
                     {links.map((link, index) => (
                         <li key={index}>
-                            <Link to={link.to} className="link-header">
-                                {link.label}
-                            </Link>
+                            {link.action ? (
+                                <button onClick={link.action} className="link-header">
+                                    {link.label}
+                                </button>
+                            ) : (
+                                <Link to={link.to} className="link-header">
+                                    {link.label}
+                                </Link>
+                            )}
                         </li>
                     ))}
                     
@@ -35,7 +46,7 @@ const Header = ({ links = [], onLogout, onVincular, nomeUsuario }) => {
                                     <FcGoogle size={20} style={{ marginRight: '8px' }} />
                                     VINCULAR
                                 </button>
-                                <button className="item-menu sair" onClick={onLogout}>
+                                <button className="item-menu sair" onClick={handleLogout}>
                                     <FaSignOutAlt style={{ marginRight: '8px' }} />
                                     SAIR
                                 </button>

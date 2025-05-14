@@ -3,9 +3,9 @@ import Header from '../../components/Header';
 
 const Analise = () => {
     const linksProfessor = [
-    { to: '/professor', label: 'INÍCIO' },
-    { to: '/professor/turmas', label: 'TURMAS' },
-    { to: '/professor/cadastro', label: 'CADASTRO' },
+    { to: '/homeProfessor', label: 'INÍCIO' },
+    { to: '/controle-turmas', label: 'TURMAS' },
+    { to: '/cadastro-atividade', label: 'CADASTRO' },
     ];
     return (
         <div className="container-analise">

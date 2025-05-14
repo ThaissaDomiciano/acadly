@@ -1,11 +1,17 @@
 import './CadastroAtividade.css';
 import Header from '../../components/Header';
+import AtividadeFormBase from '../../components/AtividadeFormBase';
 
 const CadastroAtividade = () => {
+const handleEnviar = (e) => {
+    e.preventDefault();
+    console.log('Atividade cadastrada')
+}
+
 const linksProfessor = [
-    { to: '/professor', label: 'INÍCIO' },
-    { to: '/professor/turmas', label: 'TURMAS' },
-    { to: '/professor/cadastro', label: 'CADASTRO' },
+    { to: '/homeProfessor', label: 'INÍCIO' },
+    { to: '/controle-turmas', label: 'TURMAS' },
+    { to: '/cadastro-atividade', label: 'CADASTRO' },
     ];
 
     return (
@@ -13,6 +19,17 @@ const linksProfessor = [
             <Header 
             links={linksProfessor}  
             />
+
+        <AtividadeFormBase 
+        modoEdicao={true}
+        turma=""
+        notaMaxima=""
+        dataEntrega=""
+        descricao=""
+        documento=""
+        atividadeDescricao=""
+        onEnviar={handleEnviar}
+        />
         </div>
     )
 }
