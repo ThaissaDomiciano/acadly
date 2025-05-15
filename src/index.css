@@ -6,10 +6,11 @@
     --cor-divisor: #CFCFCF;
     --branco: #FFFFFF;
     --vermelho: #DD4040;
+    --vermelho-escuro: #AB3030;
     --verde: #2ECA5D;
     --cinza-escuro: #37474F;
     --fundo-escuro: #EBEBEB;
-
+    --fonte-titulo: #737373;
     --fonte-principal: 'montserrat', sans-serif;
 }
 
@@ -21,7 +22,6 @@
 
 body {
     font-family: var(--fonte-principal);
-    background-color: var(--cor-de-fundo);
 }
 
 html, body {
@@ -31,3 +31,6 @@ html, body {
     overflow-x: hidden;
 }
 
+html, body, #root {
+    height: 100%;
+}

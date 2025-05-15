@@ -1,6 +1,6 @@
-import './CadastroAtividade.css';
 import Header from '../../components/Header';
 import AtividadeFormBase from '../../components/AtividadeFormBase';
+import BotaoSair from '../../components/BotaoSair';
 
 const CadastroAtividade = () => {
 const handleEnviar = (e) => {
@@ -15,10 +15,15 @@ const linksProfessor = [
     ];
 
     return (
-        <div className='container-cadastro-atividade'>
+        <div className='container-atividades'>
             <Header 
             links={linksProfessor}  
             />
+
+             <div className="atividades-turmas-header">
+                        <h2>CADASTRO DE ATIVIDADE</h2>
+                        <BotaoSair tipoUsuario="professor" />
+                        </div>
 
         <AtividadeFormBase 
         modoEdicao={true}

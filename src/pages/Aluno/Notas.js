@@ -1,5 +1,7 @@
 import './Notas.css';
 import Header from '../../components/Header';
+import BotaoSair from '../../components/BotaoSair';
+
 
 const Notas = () => {
      const linksAluno = [
@@ -8,10 +10,14 @@ const Notas = () => {
     { to: '/aluno/resultado', label: 'RESULTADO' },
     ];
     return (
-        <div className='container-notas'>
+        <div className='container-atividades'>
             <Header 
             links={linksAluno}
             />
+            <div className="atividades-turmas-header">
+                        <h2>ATIVIDADE</h2>
+                        <BotaoSair tipoUsuario="aluno" />
+                        </div>
         </div>
     )
 }

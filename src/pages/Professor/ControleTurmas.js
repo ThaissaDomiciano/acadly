@@ -1,5 +1,6 @@
-import './ControleTurmas.css';
+import './ControleTurmas.css'; 
 import Header from '../../components/Header';
+import BotaoSair from '../../components/BotaoSair';
 
 const ControleTurmas = () => {
     const linksProfessor = [
@@ -12,6 +13,12 @@ const ControleTurmas = () => {
             <Header 
             links={linksProfessor}
             />
+
+             <div className="atividades-turmas-header">
+                <h2>CONTROLE DE TURMAS</h2>
+                    <BotaoSair tipoUsuario="professor" />                        
+            </div>
+            
         </div>
               
     )
