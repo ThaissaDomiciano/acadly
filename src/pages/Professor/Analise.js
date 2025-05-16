@@ -26,7 +26,7 @@ const Analise = () => {
   const [atividades, setAtividades] = useState(atividadesFicticias);
   const [visiveis, setVisiveis] = useState(atividadesFicticias.map(() => false));
   const [notasTemp, setNotasTemp] = useState({});
-  const [editandoNota, setEditandoNota] = useState({}); // controla modo de edição
+  const [editandoNota, setEditandoNota] = useState({}); 
 
   const toggleAtividade = (index) => {
     const novas = [...visiveis];

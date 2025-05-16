@@ -18,6 +18,7 @@ const Notas = () => {
                         <h2>ATIVIDADE</h2>
                         <BotaoSair tipoUsuario="aluno" />
                         </div>
+            
         </div>
     )
 }
