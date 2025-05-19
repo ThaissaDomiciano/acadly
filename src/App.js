@@ -11,6 +11,7 @@ import Analise from './pages/Professor/Analise';
 import Atividades from './pages/Aluno/Atividades';
 import EnvioAtividades from './pages/Aluno/EnvioAtividades';
 import Notas from './pages/Aluno/Notas';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const [usuario, setUsuario] = useState(undefined); // undefined = carregando
@@ -54,52 +55,48 @@ function App() {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/cadastro" element={<Cadastro />} />
 
+        {/* Rotas do PROFESSOR */}
         <Route path="/homeProfessor" element={
-          usuario?.tipo === 'PROFESSOR'
-            ? <HomeProfessor usuario={usuario} onLogout={handleLogout} />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
+            <HomeProfessor usuario={usuario} onLogout={handleLogout} />
+          </PrivateRoute>
         } />
-
         <Route path="/cadastro-atividade" element={
-          usuario?.tipo === 'PROFESSOR'
-            ? <CadastroAtividade />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
+            <CadastroAtividade />
+          </PrivateRoute>
         } />
-
         <Route path="/controle-turmas" element={
-          usuario?.tipo === 'PROFESSOR'
-            ? <ControleTurmas />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
+            <ControleTurmas />
+          </PrivateRoute>
         } />
-
         <Route path="/analise" element={
-          usuario?.tipo === 'PROFESSOR'
-            ? <Analise />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
+            <Analise />
+          </PrivateRoute>
         } />
 
+        {/* Rotas do ALUNO */}
         <Route path="/homeAluno" element={
-          usuario?.tipo === 'ALUNO'
-            ? <HomeAluno usuario={usuario} onLogout={handleLogout} />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['ALUNO']}>
+            <HomeAluno usuario={usuario} onLogout={handleLogout} />
+          </PrivateRoute>
         } />
-
         <Route path="/atividades" element={
-          usuario?.tipo === 'ALUNO'
-            ? <Atividades />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['ALUNO']}>
+            <Atividades />
+          </PrivateRoute>
         } />
-
         <Route path="/envio-atividades" element={
-          usuario?.tipo === 'ALUNO'
-            ? <EnvioAtividades />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['ALUNO']}>
+            <EnvioAtividades />
+          </PrivateRoute>
         } />
-
         <Route path="/notas" element={
-          usuario?.tipo === 'ALUNO'
-            ? <Notas />
-            : <Navigate to="/login" />
+          <PrivateRoute user={usuario} allowed={['ALUNO']}>
+            <Notas />
+          </PrivateRoute>
         } />
       </Routes>
     </Router>

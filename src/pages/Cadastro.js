@@ -13,19 +13,27 @@ function Cadastro() {
     const [mensagem, setMensagem] = useState('');
 
     const HandleCadastro = async () => {
-    try {
-      await axios.post('http://localhost:8080/usuarios', {
-        nome,
-        email,
-        senha,
-        tipo
-      });
-      setMensagem('Usuário cadastrado com sucesso!');
-    } catch (error) {
-      console.error(error);
-      setMensagem('Erro ao cadastrar usuário');
-    }
-  };
+  if (!nome || !email || !senha || !tipo) {
+    setMensagem('Preencha todos os campos!');
+    return;
+  }
+
+  try {
+    await axios.post('http://localhost:8080/usuarios', {
+      nome,
+      email,
+      senha,
+      tipo: tipo.toUpperCase()
+    });
+    setMensagem('Usuário cadastrado com sucesso!');
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 1500);
+  } catch (error) {
+    console.error(error);
+    setMensagem('Erro ao cadastrar usuário');
+  }
+};
 
     return (
         <div className='cadastro-wrapper'>
