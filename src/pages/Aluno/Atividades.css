@@ -1,0 +1,76 @@
+.container-atividades {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.atividades-turmas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.atividades-turmas {
+  margin-top: 2rem;
+}
+
+.atividade-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.atividade-info h3 {
+  color: #1a237e;
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.atividade-info p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.atividade-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.entregue {
+  color: green;
+  font-weight: bold;
+}
+
+.pendente {
+  color: red;
+  font-weight: bold;
+}
+
+.botao-acessar, .botao-concluir {
+  background: #f0f0f0;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background 0.3s;
+}
+
+.botao-acessar:hover {
+  background-color: #e0e0e0;
+}
+
+.botao-concluir {
+  color: green;
+  font-size: 1.1rem;
+}
+
+.botao-concluir:hover {
+  background-color: #e0ffe0;
+}
