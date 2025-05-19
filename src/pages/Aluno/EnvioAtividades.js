@@ -21,7 +21,7 @@ const EnvioAtividades = () => {
     { to: '/aluno/resultado', label: 'RESULTADO' },
     ];
     return (
-        <div className="container-atividades">
+        <div className="container-atividades-aluno">
             <Header 
             links={linksAluno}
             />

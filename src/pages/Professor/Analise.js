@@ -75,7 +75,7 @@ const Analise = () => {
   ];
 
   return (
-    <div className="container-atividades">
+    <div className="container-atividades-professor">
       <Header links={linksProfessor} />
 
       <div className="atividades-turmas-header">

@@ -15,7 +15,7 @@ const linksProfessor = [
     ];
 
     return (
-        <div className='container-atividades'>
+        <div className='container-atividades-professor'>
             <Header 
             links={linksProfessor}  
             />

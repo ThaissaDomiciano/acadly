@@ -24,7 +24,7 @@ const Atividades = () => {
   }
 
   return (
-    <div className='container-atividades'>
+    <div className='container-atividades-aluno'>
       <Header links={linksAluno} />
       <div className="atividades-turmas-header">
         <h2>ATIVIDADE</h2>

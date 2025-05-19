@@ -1,23 +1,27 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 20px;
-    background-color: var(--cor-de-fundo);
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--cor-de-fundo);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%; 
 }
 
 .logo-header {
     width: 180px;
     height: 28px;
 }
-
 .list-header {
-    display: flex;
-    gap: 10px;
-    list-style-type: none;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px;
+  list-style-type: none;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 100%;
 }
 
 .link-header {
@@ -70,6 +74,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  z-index: 9999;
 }
 
 .item-menu {
