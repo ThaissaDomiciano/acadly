@@ -71,7 +71,7 @@ const ControleTurmas = () => {
 
       <div className="atividades-turmas-header">
         <h2>CONTROLE DE TURMAS</h2>
-        <BotaoSair tipoUsuario="professor" />
+        <BotaoSair tipo="professor" />
       </div>
 
       {turmas.map((turma, index) => (

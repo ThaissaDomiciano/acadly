@@ -1,8 +1,8 @@
 import { FaSignOutAlt } from 'react-icons/fa';
 import './BotaoSair.css';
 
-const BotaoSair = ({tipoUsuario}) => {
-    const rota = tipoUsuario === 'professor' ? '/homeProfessor' : '/homeAluno';
+const BotaoSair = ({tipo}) => {
+    const rota = tipo === 'professor' ? '/homeProfessor' : '/homeAluno';
     return (
         <button className="btn-voltar" onClick={() => window.location.href = rota}>
                 <FaSignOutAlt style={{ marginRight: '8px' }} />

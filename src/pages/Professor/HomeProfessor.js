@@ -1,79 +1,45 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import './HomeProfessor.css';
 import Header from '../../components/Header';
 import Banner from '../../assets/banner-professor.svg';
+import axios from 'axios';
 
-const HomeProfessor = () => {
-    const professorLogado = { id: 1, nome: "Professor 1" };
+const HomeProfessor = ({ usuario, onLogout }) => {
+  const [turmas, setTurmas] = useState([]);
 
-    const [turmas, setTurmas] = useState([]);
-    const [novaTurma, setNovaTurma] = useState({
-        titulo: "",
-        pendentes: 0,
-        entregues: 0,
-    });
+  useEffect(() => {
+    axios.get(`http://localhost:8080/turmas/professor/${usuario.id}`)
+      .then(res => {
+        const turmasFormatadas = res.data.map(turma => ({
+          titulo: turma.nome,
+          professor: usuario.nome,
+          pendentes: 0, // Pode puxar de /tarefas depois
+          entregues: 0
+        }));
+        setTurmas(turmasFormatadas);
+      })
+      .catch(err => console.error("Erro ao buscar turmas do professor:", err));
+  }, [usuario]);
 
-    useEffect(() => {
-        const TurmasFake = [
-            { titulo: 'Turma A', pendentes: 2, entregues: 3 },
-            { titulo: 'Turma B', pendentes: 1, entregues: 4 }
-        ];
-        setTurmas(TurmasFake);
-    }, []);
-
-    const adicionarTurma = () => {
-        if (novaTurma.titulo.trim() !== "") {
-            setTurmas([...turmas, novaTurma]);
-            setNovaTurma({ titulo: "", pendentes: 0, entregues: 0 });
-        }
-    };
-
-    const excluirTurma = (index) => {
-        const novaLista = turmas.filter((_, i) => i !== index);
-        setTurmas(novaLista);
-    };
-
-    const linksProfessor = [
+  const linksProfessor = [
     { to: '/homeProfessor', label: 'INÍCIO' },
     { to: '/controle-turmas', label: 'TURMAS' },
     { to: '/cadastro-atividade', label: 'CADASTRO' },
-    ];
+  ];
 
-    return (
-        <div className="container-professor">
-            <Header 
-            links={linksProfessor}  
-            />
-                <img src={Banner} alt="Banner" className="banner" />
-            <h2 className="titulo-professor">CRIAR NOVA TURMA</h2>
-            <div className="form-turma-container">
-                <h2 className="titulo-turma">NOME DA TURMA:</h2>
-            <div className="form-turma">
-                <input
-                    placeholder="INFORME O NOME DA TURMA"
-                    value={novaTurma.titulo}
-                    onChange={(e) => setNovaTurma({ ...novaTurma, titulo: e.target.value })}
-                />
-                <button onClick={adicionarTurma}>CRIAR</button>
-            </div>
-            </div>
-            <h3 className="subtitulo-professor">TURMAS CRIADAS</h3>
-            <div className="turmas-container">
-                {turmas.map((turma, index) => (
-                    <Card
-                        key={index}
-                        titulo={turma.titulo}
-                        professor={professorLogado.nome}
-                        pendentes={turma.pendentes}
-                        entregues={turma.entregues}
-                        onClick={() => console.log(`Entrar na sala: ${turma.titulo}`)}
-                        onExcluir={() => excluirTurma(index)}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+  return (
+    <div className="container-professor">
+      <Header links={linksProfessor} nomeUsuario={usuario.nome} onLogout={onLogout} />
+      <img src={Banner} alt="Banner" className="banner" />
+      <h2 className="titulo-professor">TURMAS</h2>
+      <div className="turmas-container">
+        {turmas.map((turma, index) => (
+          <Card key={index} {...turma} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default HomeProfessor;

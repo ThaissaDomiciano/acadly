@@ -22,7 +22,7 @@ const linksProfessor = [
 
              <div className="atividades-turmas-header">
                         <h2>CADASTRO DE ATIVIDADE</h2>
-                        <BotaoSair tipoUsuario="professor" />
+                        <BotaoSair tipo="professor" />
                         </div>
 
         <AtividadeFormBase 

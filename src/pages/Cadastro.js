@@ -3,46 +3,29 @@ import './Cadastro.css';
 import './Styles.css' 
 import Image from '../assets/img-cadastro.svg';  
 import Logo from '../assets/logo-texto.svg';
+import axios from 'axios';
 
 function Cadastro() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [tipoUsuario, setTipoUsuario] = useState('');
+    const [tipo, settipo] = useState('');
+    const [mensagem, setMensagem] = useState('');
 
-    const HandleCadastro = () => {
-        if (!nome || !email || !senha || !tipoUsuario) {
-            alert('Preencha todos os campos!');
-            return;
-        }
-
-        const novoUsuario = {
-            nome,
-            email,
-            senha,
-            tipoUsuario
-        };
-
-        const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
-        const usuarioExiste = usuariosSalvos.some((u) => u.email === email);
-
-        if (usuarioExiste) {
-            alert('E-mail já cadastrado!');
-            return;
-        }
-
-        usuariosSalvos.push(novoUsuario);
-        localStorage.setItem('usuarios', JSON.stringify(usuariosSalvos));
-        alert('Cadastro realizado com sucesso!');
-        window.location.href = '/login';
-
-        //Quando o backend estiver pronto, subtituir por:
-        //fetch('http://localhost:8080/api/usuarios', {
-        //     method: 'POST',
-        //    headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify(novoUsuario)
-        // });
-    };
+    const HandleCadastro = async () => {
+    try {
+      await axios.post('http://localhost:8080/usuarios', {
+        nome,
+        email,
+        senha,
+        tipo
+      });
+      setMensagem('Usuário cadastrado com sucesso!');
+    } catch (error) {
+      console.error(error);
+      setMensagem('Erro ao cadastrar usuário');
+    }
+  };
 
     return (
         <div className='cadastro-wrapper'>
@@ -76,19 +59,20 @@ function Cadastro() {
                 />
                 <select 
                     className='select-input'
-                    value={tipoUsuario}
-                    onChange={(e) => setTipoUsuario(e.target.value)}
-                >
+                    value={tipo}
+                    onChange={(e) => settipo(e.target.value)}
+                    >
                     <option value="">SELECIONE O TIPO DE USUÁRIO</option>
-                    <option value="aluno">ALUNO</option>
-                    <option value="professor">PROFESSOR</option>
-                </select>
+                    <option value="ALUNO">ALUNO</option>
+                    <option value="PROFESSOR">PROFESSOR</option>
+                    </select>
                 <button 
                     className='button'
                     onClick={HandleCadastro}
                 >
                     CADASTRAR
                 </button>
+                {mensagem && <p>{mensagem}</p>}
                 <p className='link-cadastro'>
                     JÁ TEM CONTA? <a href='/login'>FAÇA LOGIN</a>
                 </p>

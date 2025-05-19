@@ -80,7 +80,7 @@ const Analise = () => {
 
       <div className="atividades-turmas-header">
         <h2>ATIVIDADE</h2>
-        <BotaoSair tipoUsuario="professor" />
+        <BotaoSair tipo="professor" />
       </div>
 
       <div className="atividade-turma">

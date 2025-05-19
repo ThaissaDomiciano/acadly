@@ -43,7 +43,7 @@ const Notas = () => {
       <Header links={linksAluno} />
       <div className="atividades-turmas-header">
         <h2>ATIVIDADE</h2>
-        <BotaoSair tipoUsuario="aluno" />
+        <BotaoSair tipo="aluno" />
       </div>
 
       <div className="atividades-turmas">

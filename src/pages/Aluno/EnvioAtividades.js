@@ -27,7 +27,7 @@ const EnvioAtividades = () => {
             />
             <div className="atividades-turmas-header">
                 <h2>ATIVIDADE</h2>
-                    <BotaoSair tipoUsuario="aluno" />
+                    <BotaoSair tipo="aluno" />
                 </div>
         <AtividadeFormBase 
                 modoEdicao={false}
