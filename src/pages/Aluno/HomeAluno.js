@@ -17,7 +17,7 @@ const HomeAluno = ({ usuario, onLogout }) => {
         const turmasFormatadas = res.data.map(item => ({
           titulo: item.turma.nome,
           professor: item.turma.professor?.nome || 'Desconhecido',
-          pendentes: 2, // Ajuste quando integrar com tarefas
+          pendentes: 2, 
           entregues: 3
         }));
         setTurmas(turmasFormatadas);

@@ -22,8 +22,7 @@ const HomeProfessor = ({ usuario, onLogout }) => {
       const turmasFormatadas = res.data.map(turma => ({
         titulo: turma.nomeMateria,
         professor: usuario.nome,
-        pendentes: 0,
-        entregues: 0
+        turmaOriginal: turma, 
       }));
       setTurmas(turmasFormatadas);
     } catch (err) {
@@ -77,8 +76,11 @@ const HomeProfessor = ({ usuario, onLogout }) => {
       <h2 className="titulo-professor">TURMAS CRIADAS</h2>
       <div className="turmas-container">
         {turmas.map((turma, index) => (
-          <Card key={index} {...turma} 
-          onClick={() => navigate('/analise')}
+          <Card
+            key={index}
+            titulo={turma.titulo}
+            professor={turma.professor}
+            onClick={() => navigate('/analise', { state: { turma: turma.turmaOriginal } })}
           />
         ))}
       </div>

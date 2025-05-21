@@ -10,7 +10,6 @@ const Atividades = () => {
     { to: '/aluno/resultado', label: 'RESULTADO' },
   ]
 
-  // Simulando lista de atividades com estado de conclusão
   const [atividades, setAtividades] = useState([
     { id: 1, titulo: 'ATIVIDADE 1', data: '01/05/2025 a 07/05/2025', entregue: false },
     { id: 2, titulo: 'ATIVIDADE 2', data: '01/05/2025 a 07/05/2025', entregue: false },

@@ -21,9 +21,9 @@ function Login({ onLogin }) {
       const usuario = usuarios.find(u => u.email === email && u.senha === senha);
 
       if (usuario) {
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        localStorage.setItem('usuario', JSON.stringify(usuario));
         onLogin(usuario);
-        setUsuarioLogado(usuario); // <-- Atualiza para o useEffect reagir
+        setUsuarioLogado(usuario); 
       } else {
         setErro('E-mail ou senha inválidos');
       }
@@ -33,7 +33,6 @@ function Login({ onLogin }) {
     }
   };
 
-  // Redireciona após login bem-sucedido
   useEffect(() => {
     if (usuarioLogado) {
       if (usuarioLogado.tipo === 'PROFESSOR') {

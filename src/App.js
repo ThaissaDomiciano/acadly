@@ -14,7 +14,7 @@ import Notas from './pages/Aluno/Notas';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const [usuario, setUsuario] = useState(undefined); // undefined = carregando
+  const [usuario, setUsuario] = useState(undefined); 
 
   useEffect(() => {
     const userStorage = localStorage.getItem('usuario');

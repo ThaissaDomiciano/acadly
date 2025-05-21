@@ -1,32 +1,53 @@
 import './Analise.css';
 import Header from '../../components/Header';
 import BotaoSair from '../../components/BotaoSair';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp, FaEye, FaEdit, FaCheck } from 'react-icons/fa';
-
-const atividadesFicticias = [
-  {
-    nome: 'ATIVIDADE 1',
-    data: 'DE 01/05/2025 A 07/05/2025',
-    alunos: [
-      { nome: 'ALUNA TURMA A', status: 'ENTREGUE', nota: '', pdfUrl: '#' },
-      { nome: 'ALUNA TURMA A', status: 'ENTREGUE', nota: '', pdfUrl: '#' },
-      { nome: 'ALUNA TURMA A', status: 'ENTREGUE', nota: '', pdfUrl: '#' },
-      { nome: 'ALUNA TURMA A', status: 'PENDENTE', nota: '', pdfUrl: null },
-    ],
-  },
-  {
-    nome: 'ATIVIDADE 2',
-    data: 'DE 01/05/2025 A 07/05/2025',
-    alunos: [],
-  },
-];
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const Analise = () => {
-  const [atividades, setAtividades] = useState(atividadesFicticias);
-  const [visiveis, setVisiveis] = useState(atividadesFicticias.map(() => false));
+  const location = useLocation();
+  const turma = location.state?.turma;
+
+  const [atividades, setAtividades] = useState([]);
+  const [visiveis, setVisiveis] = useState([]);
   const [notasTemp, setNotasTemp] = useState({});
-  const [editandoNota, setEditandoNota] = useState({}); 
+  const [editandoNota, setEditandoNota] = useState({});
+
+  useEffect(() => {
+    const buscarAtividades = async () => {
+      if (!turma?.id) return;
+
+      try {
+        const response = await axios.get(`http://localhost:8080/tarefas/turma/${turma.id}`);
+        const atividadesComAlunos = await Promise.all(response.data.map(async (atividade) => {
+          const entregaResp = await axios.get(`http://localhost:8080/entregas/tarefa/${atividade.id}`);
+          
+          const alunos = entregaResp.data.map((entrega) => ({
+            nome: entrega.aluno.nome,
+            status: entrega.linkEntrega ? 'ENTREGUE' : 'PENDENTE',
+            nota: entrega.notaRecebida,
+            pdfUrl: entrega.linkEntrega,
+            entregaId: entrega.id
+          }));
+
+          return {
+            nome: atividade.titulo,
+            data: `De ${atividade.dataEntrega} a ${atividade.dataEntrega}`, 
+            alunos
+          };
+        }));
+
+        setAtividades(atividadesComAlunos);
+        setVisiveis(atividadesComAlunos.map(() => false));
+      } catch (error) {
+        console.error('Erro ao buscar atividades:', error);
+      }
+    };
+
+    buscarAtividades();
+  }, [turma]);
 
   const toggleAtividade = (index) => {
     const novas = [...visiveis];
@@ -46,26 +67,37 @@ const Analise = () => {
     setNotasTemp({ ...notasTemp, [key]: notaAtual });
   };
 
-  const salvarNota = (atividadeIndex, alunoIndex) => {
+  const salvarNota = async (atividadeIndex, alunoIndex) => {
     const key = `${atividadeIndex}-${alunoIndex}`;
     const novaNota = notasTemp[key];
+    const entregaId = atividades[atividadeIndex].alunos[alunoIndex].entregaId;
 
-    const novasAtividades = [...atividades];
-    novasAtividades[atividadeIndex].alunos[alunoIndex].nota = novaNota;
-    setAtividades(novasAtividades);
+    try {
+      await axios.put(`http://localhost:8080/entregas/avaliar/${entregaId}`, { nota: novaNota });
 
-    const novasNotasTemp = { ...notasTemp };
-    delete novasNotasTemp[key];
-    setNotasTemp(novasNotasTemp);
+      const novasAtividades = [...atividades];
+      novasAtividades[atividadeIndex].alunos[alunoIndex].nota = novaNota;
+      setAtividades(novasAtividades);
 
-    const novosEditando = { ...editandoNota };
-    delete novosEditando[key];
-    setEditandoNota(novosEditando);
+      const novasNotasTemp = { ...notasTemp };
+      delete novasNotasTemp[key];
+      setNotasTemp(novasNotasTemp);
+
+      const novosEditando = { ...editandoNota };
+      delete novosEditando[key];
+      setEditandoNota(novosEditando);
+    } catch (error) {
+      console.error('Erro ao salvar nota:', error);
+      alert('Erro ao salvar nota');
+    }
   };
 
   const visualizarPdf = (url) => {
-    alert("Visualizar PDF do aluno (simulado)");
-    // window.open(url, '_blank'); // use se tiver URL real
+    if (!url) {
+      alert("Nenhum PDF enviado.");
+      return;
+    }
+    window.open(url, '_blank');
   };
 
   const linksProfessor = [
@@ -79,11 +111,14 @@ const Analise = () => {
       <Header links={linksProfessor} />
 
       <div className="atividades-turmas-header">
-        <h2>ATIVIDADE</h2>
+        <h2>{turma?.nomeMateria?.toUpperCase() || 'ANÁLISE DE ATIVIDADES'}</h2>
         <BotaoSair tipo="professor" />
       </div>
 
       <div className="atividade-turma">
+        {atividades.length === 0 && (
+          <p style={{ marginTop: '20px' }}>Nenhuma atividade cadastrada para esta turma.</p>
+        )}
 
         {atividades.map((atividade, index) => (
           <div className="atividade-box" key={index}>
@@ -100,9 +135,7 @@ const Analise = () => {
                 {atividade.alunos.map((aluno, alunoIndex) => {
                   const key = `${index}-${alunoIndex}`;
                   const estaEditando = editandoNota[key] || false;
-                  const notaAtual = estaEditando
-                    ? notasTemp[key]
-                    : atividades[index].alunos[alunoIndex].nota;
+                  const notaAtual = estaEditando ? notasTemp[key] : aluno.nota ?? '';
 
                   return (
                     <div key={alunoIndex} className="linha-aluno">
@@ -110,10 +143,7 @@ const Analise = () => {
                       <span className={`status ${aluno.status.toLowerCase()}`}>{aluno.status}</span>
 
                       {aluno.status === 'ENTREGUE' && (
-                        <button
-                          className="btn-visualizar"
-                          onClick={() => visualizarPdf(aluno.pdfUrl)}
-                        >
+                        <button className="btn-visualizar" onClick={() => visualizarPdf(aluno.pdfUrl)}>
                           <FaEye />
                         </button>
                       )}
@@ -123,9 +153,7 @@ const Analise = () => {
                         type="number"
                         placeholder="Nota"
                         value={notaAtual}
-                        onChange={(e) =>
-                          handleNotaChange(index, alunoIndex, e.target.value)
-                        }
+                        onChange={(e) => handleNotaChange(index, alunoIndex, e.target.value)}
                         min="0"
                         max="10"
                         disabled={!estaEditando}

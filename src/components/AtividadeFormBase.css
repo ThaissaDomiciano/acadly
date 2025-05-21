@@ -68,3 +68,21 @@
 .botoes button:hover {
     background-color: var(--cor-primaria-hover);
 }
+
+.input-estilizado {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  font-size: 1rem;
+  color: #333;
+  margin-top: 5px;
+  outline: none;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.input-estilizado:focus {
+  box-shadow: 0 0 0 2px #4a90e2;
+}
