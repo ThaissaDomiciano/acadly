@@ -76,11 +76,17 @@ const HomeProfessor = ({ usuario, onLogout }) => {
       <h2 className="titulo-professor">TURMAS CRIADAS</h2>
       <div className="turmas-container">
         {turmas.map((turma, index) => (
-          <Card
+         <Card
             key={index}
             titulo={turma.titulo}
             professor={turma.professor}
-            onClick={() => navigate('/analise', { state: { turma: turma.turmaOriginal } })}
+            botoes={[
+              {
+                label: 'ANÁLISE',
+                className: 'botao-sala',
+                onClick: () => navigate('/analise', { state: { turma: turma.turmaOriginal } })
+              }
+            ]}
           />
         ))}
       </div>

@@ -48,16 +48,25 @@
     margin-bottom: 12px;
 }
 
-.card-footer {
+.card-footer-botoes {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     background-color: var(--cor-primaria);
-    color: var(--cor-secundaria); 
     padding: 16px;
-    font-weight: bold;
-    font-size: 16px;
     border-top: 1px solid var(--cor-divisor);
-    cursor: pointer;
+    height: 60px;
 }
 
-.card-footer:hover {
-    background-color: var(--cor-primaria-hover); 
+.card-footer-botoes button {
+    background: none;
+    color: var(--cor-secundaria);
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
+

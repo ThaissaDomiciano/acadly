@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
 import './HomeAluno.css';
 import Header from "../../components/Header";
@@ -11,14 +12,15 @@ const HomeAluno = ({ usuario, onLogout }) => {
   const turmasRef = useRef(null);
   const resultadoRef = useRef(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios.get(`http://localhost:8080/aluno-turma/aluno/${usuario.id}`)
       .then(res => {
         const turmasFormatadas = res.data.map(item => ({
-          titulo: item.turma.nome,
-          professor: item.turma.professor?.nome || 'Desconhecido',
-          pendentes: 2, 
-          entregues: 3
+          id: item.turma.id,
+          titulo: item.turma.nomeMateria,
+          professor: item.turma.professor?.nome || 'Desconhecido'
         }));
         setTurmas(turmasFormatadas);
       })
@@ -36,20 +38,49 @@ const HomeAluno = ({ usuario, onLogout }) => {
   return (
     <div className="container-aluno">
       <Header links={linksAluno} nomeUsuario={usuario.nome} onLogout={onLogout} />
-      <section ref={inicioRef}><img src={Banner} alt="Banner" className="banner" /></section>
+
+      <section ref={inicioRef}>
+        <img src={Banner} alt="Banner" className="banner" />
+      </section>
+
       <section ref={turmasRef}>
         <h3 className="titulo-aluno">SUAS TURMAS</h3>
         <div className="turmas-aluno">
           {turmas.map((turma, index) => (
-            <Card key={index} {...turma} />
+            <Card
+              key={`turma-${index}`}
+              id={turma.id}
+              titulo={turma.titulo}
+              professor={turma.professor}
+              botoes={[
+                {
+                  label: 'SALA',
+                  onClick: () =>
+                   navigate('/atividades', { state: { turmaId: turma.id } })
+                }
+              ]}
+            />
           ))}
         </div>
       </section>
+
       <section ref={resultadoRef}>
         <h3 className="subtitulo-aluno">SEUS RESULTADOS</h3>
         <div className="turmas-aluno">
           {turmas.map((turma, index) => (
-            <Card key={index} {...turma} />
+            <Card
+              key={`resultado-${index}`}
+              id={turma.id}
+              titulo={turma.titulo}
+              professor={turma.professor}
+              botoes={[
+                {
+                  label: 'RESULTADO',
+                  onClick: () =>
+                    navigate('/notas', { state: { turmaId: turma.id } })
+                }
+              ]}
+            />
           ))}
         </div>
       </section>
