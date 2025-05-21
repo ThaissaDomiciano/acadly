@@ -1,62 +1,108 @@
 import './ControleTurmas.css';
 import Header from '../../components/Header';
 import BotaoSair from '../../components/BotaoSair';
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FaChevronDown, FaChevronUp, FaEdit, FaTrash } from 'react-icons/fa';
+import axios from 'axios';
 
 const ControleTurmas = () => {
-  const [turmas, setTurmas] = useState([
-    {
-      nomeTurma: 'LÍNGUA PORTUGUESA - TURMA A',
-      alunos: [
-        { nome: 'ALUNA TURMA A', email: 'aluno@aluno.com' },
-        { nome: 'ALUNA TURMA A', email: 'aluno@aluno.com' },
-        { nome: 'ALUNA TURMA A', email: 'aluno@aluno.com' },
-      ],
-    },
-    {
-      nomeTurma: 'LÍNGUA PORTUGUESA - TURMA B',
-      alunos: [],
-    },
-  ]);
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+  const [turmas, setTurmas] = useState([]);
+  const [turmasVisiveis, setTurmasVisiveis] = useState({});
+  const [mensagem, setMensagem] = useState('');
 
-  const [turmasVisiveis, setTurmasVisiveis] = useState(
-    turmas.map(() => false)
-  );
+  const buscarTurmas = useCallback(async () => {
+    if (!usuario?.id) return;
 
-  const toggleTurma = (index) => {
-    const novas = [...turmasVisiveis];
-    novas[index] = !novas[index];
-    setTurmasVisiveis(novas);
+    try {
+      const res = await axios.get(`http://localhost:8080/turmas/professor/${usuario.id}`);
+
+      const turmasRecebidas = await Promise.all(
+        res.data.map(async (t) => {
+          try {
+            const alunosRes = await axios.get(`http://localhost:8080/aluno-turma/turma/${t.id}`);
+            return { ...t, alunos: alunosRes.data };
+          } catch (e) {
+            console.warn(`Erro ao buscar alunos da turma ${t.id}:`, e);
+            return { ...t, alunos: [] };
+          }
+        })
+      );
+
+      setTurmas(turmasRecebidas);
+
+      setTurmasVisiveis((prev) => {
+        const novoEstado = { ...prev };
+        turmasRecebidas.forEach((t) => {
+          if (!(t.id in novoEstado)) {
+            novoEstado[t.id] = false;
+          }
+        });
+        return novoEstado;
+      });
+    } catch (err) {
+      console.error('Erro ao carregar turmas:', err);
+    }
+  }, [usuario]);
+
+  useEffect(() => {
+    buscarTurmas();
+  }, [buscarTurmas]);
+
+  const toggleTurma = (idTurma) => {
+    setTurmasVisiveis((prev) => ({
+      ...prev,
+      [idTurma]: !prev[idTurma],
+    }));
   };
 
-  const editarAluno = (turmaIndex, alunoIndex) => {
-    const nome = prompt("Novo nome:");
-    const email = prompt("Novo e-mail:");
-    if (!nome || !email) return;
+  const adicionarAluno = async (turmaIndex) => {
+    const email = prompt("E-mail do aluno:");
+    if (!email) return;
 
-    const novasTurmas = [...turmas];
-    novasTurmas[turmaIndex].alunos[alunoIndex] = { nome, email };
-    setTurmas(novasTurmas);
+    try {
+      const response = await axios.get('http://localhost:8080/usuarios');
+      const usuarios = response.data;
+      const aluno = usuarios.find(u => u.email === email && u.tipo === 'ALUNO');
+
+      if (!aluno) {
+        setMensagem('Aluno não encontrado com esse e-mail.');
+        return;
+      }
+
+      const turma = turmas[turmaIndex];
+
+      await axios.post('http://localhost:8080/aluno-turma', {
+        aluno: { id: aluno.id },
+        turma: { id: turma.id }
+      });
+
+      await buscarTurmas();
+      setMensagem(`Aluno ${aluno.nome} adicionado com sucesso!`);
+    } catch (error) {
+      console.error('Erro ao adicionar aluno:', error);
+      setMensagem('Erro ao adicionar aluno.');
+    }
   };
 
-  const excluirAluno = (turmaIndex, alunoIndex) => {
-    const confirmar = window.confirm("Deseja excluir este aluno?");
+  const excluirAluno = async (turmaIndex, alunoId) => {
+    const confirmar = window.confirm("Deseja remover este aluno da turma?");
     if (!confirmar) return;
 
-    const novasTurmas = [...turmas];
-    novasTurmas[turmaIndex].alunos.splice(alunoIndex, 1);
-    setTurmas(novasTurmas);
-  };
+    try {
+      const turma = turmas[turmaIndex];
+      await axios.delete(`http://localhost:8080/aluno-turma`, {
+        data: {
+          aluno: { id: alunoId },
+          turma: { id: turma.id }
+        }
+      });
 
-  const adicionarAluno = (turmaIndex) => {
-    const nome = prompt("Nome do aluno:");
-    const email = prompt("E-mail do aluno:");
-    if (!nome || !email) return;
-
-    const novasTurmas = [...turmas];
-    novasTurmas[turmaIndex].alunos.push({ nome, email });
-    setTurmas(novasTurmas);
+      await buscarTurmas();
+    } catch (error) {
+      console.error('Erro ao remover aluno:', error);
+      setMensagem('Erro ao remover aluno da turma.');
+    }
   };
 
   const linksProfessor = [
@@ -65,23 +111,43 @@ const ControleTurmas = () => {
     { to: '/cadastro-atividade', label: 'CADASTRO' },
   ];
 
+  if (!usuario) {
+    return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Você precisa estar logado para acessar esta página.</p>;
+  }
+
   return (
     <div className="container-atividades-professor">
       <Header links={linksProfessor} />
-
       <div className="atividades-turmas-header">
         <h2>CONTROLE DE TURMAS</h2>
         <BotaoSair tipo="professor" />
       </div>
 
+      {mensagem && <p style={{ color: 'red', textAlign: 'center' }}>{mensagem}</p>}
+
+      {turmas.length === 0 && (
+        <p style={{ textAlign: 'center', marginTop: '2rem' }}>Nenhuma turma encontrada.</p>
+      )}
+
       {turmas.map((turma, index) => (
-        <div key={index} className="turma-container">
-          <div className="turma-header" onClick={() => toggleTurma(index)}>
-            <strong>{turma.nomeTurma}</strong>
-            {turmasVisiveis[index] ? <FaChevronUp /> : <FaChevronDown />}
+        <div key={turma.id} className="turma-container">
+          <div className="turma-header">
+            <strong>{turma.nomeMateria}</strong>
+            <button
+              className="btn-toggle"
+              onClick={() => toggleTurma(turma.id)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--cor-primaria)'
+              }}
+            >
+              {turmasVisiveis[turma.id] ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
           </div>
 
-          {turmasVisiveis[index] && (
+          {turmasVisiveis[turma.id] && (
             <div className="turma-conteudo">
               <div className="tabela-alunos">
                 <div className="linha-cabecalho">
@@ -91,29 +157,31 @@ const ControleTurmas = () => {
                 </div>
 
                 <div className="lista-alunos">
-                  {turma.alunos.map((aluno, i) => (
-                    <div className="linha-aluno" key={i}>
-                      <span>{aluno.nome}</span>
-                      <span>{aluno.email}</span>
+                  {turma.alunos?.length === 0 && (
+                    <div style={{ padding: '10px', textAlign: 'center', fontStyle: 'italic' }}>
+                      Nenhum aluno nesta turma ainda.
+                    </div>
+                  )}
+
+                  {turma.alunos?.map((relacao, i) => (
+                    <div className="linha-aluno" key={relacao.aluno.id || i}>
+                      <span>{relacao.aluno.nome}</span>
+                      <span>{relacao.aluno.email}</span>
                       <span className="acoes">
-                        <button
-                          className="btn-editar"
-                          onClick={() => editarAluno(index, i)}
-                        >
+                        <button className="btn-editar" onClick={() => alert("Edição apenas visual por enquanto.")}>
                           <FaEdit />
                         </button>
-                        <button
-                          className="btn-excluir"
-                          onClick={() => excluirAluno(index, i)}
-                        >
+                        <button className="btn-excluir" onClick={() => excluirAluno(index, relacao.aluno.id)}>
                           <FaTrash />
                         </button>
                       </span>
                     </div>
                   ))}
+
                   <div
                     className="linha-adicionar"
                     onClick={() => adicionarAluno(index)}
+                    style={{ cursor: 'pointer' }}
                   >
                     <span>ADICIONAR ALUNO</span>
                     <span className="mais">+</span>

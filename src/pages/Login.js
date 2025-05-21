@@ -21,7 +21,7 @@ function Login({ onLogin }) {
       const usuario = usuarios.find(u => u.email === email && u.senha === senha);
 
       if (usuario) {
-        localStorage.setItem('usuario', JSON.stringify(usuario));
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
         onLogin(usuario);
         setUsuarioLogado(usuario); // <-- Atualiza para o useEffect reagir
       } else {
