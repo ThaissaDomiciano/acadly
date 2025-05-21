@@ -48,19 +48,6 @@
     margin-bottom: 12px;
 }
 
-.pendente {
-    color: var(--vermelho);
-}
-
-.entregue {
-    color: var(--verde);
-}
-
-.titulo-pendente,
-.titulo-entregue {
-    color: var(--cor-clara);
-}
-
 .card-footer {
     background-color: var(--cor-primaria);
     color: var(--cor-secundaria); 

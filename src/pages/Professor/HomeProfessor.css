@@ -1,34 +1,3 @@
-.form-turma {
-    margin-bottom: 24px;
-    display: flex;
-    gap: 10px;
-}
-
-.form-turma input {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid var(--cor-divisor);
-    border-radius: 5px;
-    width: 100%;
-}
-
-.form-turma button {
-    background-color: var(--cor-primaria);
-    width: 170px;
-    color: var(--branco);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.turmas-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
 .banner {
     width: 100%;
     height: auto;
@@ -36,6 +5,15 @@
     box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
     margin-bottom: 25px;
 }
+
+.turmas-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px; 
+  padding: 20px;
+}
+
 
 .form-turma-container {
     background-color: var(--branco);
@@ -58,3 +36,57 @@
     text-align: center;
     margin-bottom: 12px;
 }
+
+.criar-turma-box {
+  background-color: var(--branco);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 900px;
+  margin: 40px auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.criar-turma-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.label-turma {
+  font-size: 14px;
+  color: var(--cor-clara);
+  font-weight: bold;
+}
+
+.input-criar-turma {
+  min-width: 300px;
+  max-width: 400px;
+  padding: 12px 14px;
+  border: 1px solid var(--cor-divisor);
+  border-radius: 10px;
+  background-color: var(--branco);
+  color: var(--cor-escura);
+  font-size: 14px;
+  flex: 1;
+}
+
+.btn-criar-turma {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: var(--cor-primaria);
+  color: var(--branco);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-criar-turma:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
