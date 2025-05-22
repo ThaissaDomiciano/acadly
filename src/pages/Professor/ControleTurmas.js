@@ -6,7 +6,7 @@ import { FaChevronDown, FaChevronUp, FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
 const ControleTurmas = () => {
-  const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const [turmas, setTurmas] = useState([]);
   const [turmasVisiveis, setTurmasVisiveis] = useState({});
   const [mensagem, setMensagem] = useState('');
