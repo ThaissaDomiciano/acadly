@@ -1,3 +1,4 @@
+// IMPORTS
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import AtividadeFormBase from '../../components/AtividadeFormBase';
@@ -19,7 +20,6 @@ const CadastroAtividade = () => {
         console.error('Erro ao buscar turmas:', error);
       }
     };
-
     buscarTurmas();
   }, []);
 
@@ -33,8 +33,6 @@ const CadastroAtividade = () => {
         linkPdf: formData.documento,
         turma: { id: parseInt(formData.turma) }
       };
-
-      console.log("👉 Enviando para o backend:", novaAtividade);
 
       await axios.post('http://localhost:8080/tarefas', novaAtividade);
       alert('Atividade cadastrada com sucesso!');
@@ -54,7 +52,6 @@ const CadastroAtividade = () => {
   return (
     <div className='container-atividades-professor'>
       <Header links={linksProfessor} />
-
       <div className="atividades-turmas-header">
         <h2>CADASTRO DE ATIVIDADE</h2>
         <BotaoSair tipo="professor" />
@@ -70,7 +67,7 @@ const CadastroAtividade = () => {
           documento=""
           atividadeDescricao=""
           onEnviar={handleEnviar}
-          turmas={turmas} 
+          turmas={turmas}
           setTurmaSelecionada={setTurmaSelecionada}
         />
       ) : (

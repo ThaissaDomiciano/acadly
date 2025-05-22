@@ -17,11 +17,8 @@ const HomeAluno = ({ usuario, onLogout }) => {
   useEffect(() => {
     axios.get(`http://localhost:8080/aluno-turma/aluno/${usuario.id}`)
       .then(res => {
-        const turmasFormatadas = res.data.map(item => ({
-          id: item.turma.id,
-          titulo: item.turma.nomeMateria,
-          professor: item.turma.professor?.nome || 'Desconhecido'
-        }));
+        // Agora mantém o objeto completo da turma
+        const turmasFormatadas = res.data.map(item => item.turma);
         setTurmas(turmasFormatadas);
       })
       .catch(err => console.error("Erro ao buscar turmas do aluno:", err));
@@ -50,13 +47,18 @@ const HomeAluno = ({ usuario, onLogout }) => {
             <Card
               key={`turma-${index}`}
               id={turma.id}
-              titulo={turma.titulo}
-              professor={turma.professor}
+              titulo={turma.nomeMateria}
+              professor={turma.professor?.nome || 'Desconhecido'}
               botoes={[
                 {
                   label: 'SALA',
                   onClick: () =>
-                   navigate('/atividades', { state: { turmaId: turma.id } })
+                    navigate('/atividades', {
+                      state: {
+                        turma,    // envia o objeto completo
+                        usuario   // envia o aluno logado
+                      }
+                    })
                 }
               ]}
             />
@@ -71,13 +73,18 @@ const HomeAluno = ({ usuario, onLogout }) => {
             <Card
               key={`resultado-${index}`}
               id={turma.id}
-              titulo={turma.titulo}
-              professor={turma.professor}
+              titulo={turma.nomeMateria}
+              professor={turma.professor?.nome || 'Desconhecido'}
               botoes={[
                 {
                   label: 'RESULTADO',
                   onClick: () =>
-                    navigate('/notas', { state: { turmaId: turma.id } })
+                    navigate('/notas', {
+                      state: {
+                        turma,
+                        usuario
+                      }
+                    })
                 }
               ]}
             />

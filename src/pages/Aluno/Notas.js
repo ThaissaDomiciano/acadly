@@ -1,35 +1,62 @@
 import './Notas.css'
 import Header from '../../components/Header'
 import BotaoSair from '../../components/BotaoSair'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useLocation } from 'react-router-dom'
 
 const Notas = () => {
+  const location = useLocation()
+  const usuario = location.state?.usuario
+
   const linksAluno = [
     { to: '/aluno', label: 'INÍCIO' },
     { to: '/aluno/turmas', label: 'TURMAS' },
     { to: '/aluno/resultado', label: 'RESULTADO' },
   ]
 
-  const [atividades, setAtividades] = useState([
-    {
-      id: 1,
-      titulo: 'ATIVIDADE 1',
-      data: '01/05/2025 a 07/05/2025',
-      descricao: 'ATIVIDADE DE REDAÇÃO - LÍNGUA PORTUGUESA',
-      situacao: 'ENTREGUE',
-      nota: 10,
-      expandido: true,
-    },
-    {
-      id: 2,
-      titulo: 'ATIVIDADE 2',
-      data: '01/05/2025 a 07/05/2025',
-      descricao: '',
-      situacao: 'PENDENTE',
-      nota: null,
-      expandido: false,
-    },
-  ])
+  const [atividades, setAtividades] = useState([])
+
+  useEffect(() => {
+    if (!usuario) return
+
+    const carregarNotas = async () => {
+      try {
+        const resTurmas = await axios.get(`http://localhost:8080/aluno-turma/aluno/${usuario.id}`)
+        const todasAtividades = []
+        const entregasRes = await axios.get(`http://localhost:8080/entregas/aluno/${usuario.id}`)
+        const entregasMap = {}
+        entregasRes.data.forEach(entrega => {
+          entregasMap[entrega.tarefa.id] = entrega
+        })
+
+        for (const relacao of resTurmas.data) {
+          const turma = relacao.turma
+          const tarefasRes = await axios.get(`http://localhost:8080/tarefas/turma/${turma.id}`)
+
+          tarefasRes.data.forEach(tarefa => {
+            const entrega = entregasMap[tarefa.id]
+            todasAtividades.push({
+              id: tarefa.id,
+              titulo: tarefa.titulo,
+              data: `De ${tarefa.dataEntrega} a ${tarefa.dataEntrega}`,
+              descricao: tarefa.descricao,
+              situacao: entrega ? 'ENTREGUE' : 'PENDENTE',
+              nota: entrega?.notaRecebida ?? null,
+              linkPdf: entrega?.linkEntrega,
+              expandido: false
+            })
+          })
+        }
+
+        setAtividades(todasAtividades)
+      } catch (error) {
+        console.error('Erro ao carregar notas:', error)
+      }
+    }
+
+    carregarNotas()
+  }, [usuario])
 
   const toggleExpandir = (id) => {
     const novas = atividades.map((a) =>
@@ -38,11 +65,19 @@ const Notas = () => {
     setAtividades(novas)
   }
 
+  const visualizarEntrega = (link) => {
+    if (!link) {
+      alert('Nenhuma entrega disponível.')
+      return
+    }
+    window.open(link, '_blank')
+  }
+
   return (
     <div className="container-atividades-aluno">
       <Header links={linksAluno} />
       <div className="atividades-turmas-header">
-        <h2>ATIVIDADE</h2>
+        <h2>ATIVIDADES</h2>
         <BotaoSair tipo="aluno" />
       </div>
 
@@ -52,7 +87,7 @@ const Notas = () => {
             <div className="atividade-topo" onClick={() => toggleExpandir(atividade.id)}>
               <div>
                 <h3>{atividade.titulo}</h3>
-                <p>DE {atividade.data}</p>
+                <p>{atividade.data}</p>
               </div>
               <span className="seta">
                 {atividade.expandido ? '▲' : '▼'}
@@ -68,14 +103,16 @@ const Notas = () => {
                   </div>
                   <div>
                     <p><strong>NOTA</strong></p>
-                    <p>{atividade.nota !== null ? atividade.nota : '-'}</p>
+                    <p>{atividade.nota != null ? atividade.nota : '-'}</p>
                   </div>
-                  <button
-                    className="botao-ver-pdf"
-                    onClick={() => alert(`Visualizar entrega de ${atividade.titulo}`)}
-                  >
-                    👁
-                  </button>
+                  {atividade.situacao === 'ENTREGUE' && (
+                    <button
+                      className="botao-ver-pdf"
+                      onClick={() => visualizarEntrega(atividade.linkPdf)}
+                    >
+                      👁
+                    </button>
+                  )}
                 </div>
               </div>
             )}
