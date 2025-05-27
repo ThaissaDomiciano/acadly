@@ -4,6 +4,7 @@ import BotaoSair from '../../components/BotaoSair'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Notas = () => {
   const location = useLocation()
@@ -90,7 +91,7 @@ const Notas = () => {
                 <p>{atividade.data}</p>
               </div>
               <span className="seta">
-                {atividade.expandido ? '▲' : '▼'}
+                {atividade.expandido ? <FaChevronUp /> : <FaChevronDown />}
               </span>
             </div>
 
