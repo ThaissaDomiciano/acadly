@@ -3,13 +3,13 @@ import Header from '../../components/Header';
 import BotaoSair from '../../components/BotaoSair';
 import { useEffect, useState, useCallback } from 'react';
 import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const ControleTurmas = () => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const [turmas, setTurmas] = useState([]);
   const [turmasVisiveis, setTurmasVisiveis] = useState({});
-  const [mensagem, setMensagem] = useState('');
 
   const buscarTurmas = useCallback(async () => {
     if (!usuario?.id) return;
@@ -66,7 +66,7 @@ const ControleTurmas = () => {
       const aluno = usuarios.find(u => u.email === email && u.tipo === 'ALUNO');
 
       if (!aluno) {
-        setMensagem('Aluno não encontrado com esse e-mail.');
+        toast.warning('Aluno não encontrado com esse e-mail.');
         return;
       }
 
@@ -78,10 +78,10 @@ const ControleTurmas = () => {
       });
 
       await buscarTurmas();
-      setMensagem(`Aluno ${aluno.nome} adicionado com sucesso!`);
+      toast.success(`Aluno ${aluno.nome} adicionado com sucesso!`);
     } catch (error) {
       console.error('Erro ao adicionar aluno:', error);
-      setMensagem('Erro ao adicionar aluno.');
+      toast.error('Erro ao adicionar aluno.');
     }
   };
 
@@ -94,17 +94,17 @@ const ControleTurmas = () => {
     const relacao = turma.alunos.find(rel => rel.aluno.id === alunoId);
 
     if (!relacao || !relacao.id) {
-      setMensagem('Vínculo do aluno com a turma não encontrado.');
+      toast.warning('Vínculo do aluno com a turma não encontrado.');
       return;
     }
 
     await axios.delete(`http://localhost:8080/aluno-turma/${relacao.id}`);
 
     await buscarTurmas(); 
-    setMensagem('Aluno removido da turma com sucesso.');
+    toast.success('Aluno removido da turma com sucesso.');
   } catch (error) {
     console.error('Erro ao remover aluno:', error);
-    setMensagem('Erro ao remover aluno da turma.');
+    toast.error('Erro ao remover aluno da turma.');
   }
 };
 
@@ -125,8 +125,6 @@ const ControleTurmas = () => {
         <h2>CONTROLE DE TURMAS</h2>
         <BotaoSair tipo="professor" />
       </div>
-
-      {mensagem && <p style={{ color: 'red', textAlign: 'center' }}>{mensagem}</p>}
 
       {turmas.length === 0 && (
         <p style={{ textAlign: 'center', marginTop: '2rem' }}>Nenhuma turma encontrada.</p>

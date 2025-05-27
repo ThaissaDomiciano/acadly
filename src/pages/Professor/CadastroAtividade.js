@@ -5,6 +5,7 @@ import AtividadeFormBase from '../../components/AtividadeFormBase';
 import BotaoSair from '../../components/BotaoSair';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const CadastroAtividade = () => {
   const navigate = useNavigate();
@@ -35,11 +36,11 @@ const CadastroAtividade = () => {
       };
 
       await axios.post('http://localhost:8080/tarefas', novaAtividade);
-      alert('Atividade cadastrada com sucesso!');
+      toast.success('Atividade cadastrada com sucesso!');
       navigate('/analise');
     } catch (error) {
       console.error('Erro ao cadastrar atividade:', error);
-      alert('Erro ao cadastrar atividade');
+      toast.error('Erro ao cadastrar atividade');
     }
   };
 

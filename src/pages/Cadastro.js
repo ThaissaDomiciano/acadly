@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import './Cadastro.css';   
 import './Styles.css' 
 import Image from '../assets/img-cadastro.svg';  
@@ -10,11 +11,10 @@ function Cadastro() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [tipo, settipo] = useState('');
-    const [mensagem, setMensagem] = useState('');
 
     const HandleCadastro = async () => {
   if (!nome || !email || !senha || !tipo) {
-    setMensagem('Preencha todos os campos!');
+    toast.warning("Preencha todos os campos!"); 
     return;
   }
 
@@ -25,13 +25,13 @@ function Cadastro() {
       senha,
       tipo: tipo.toUpperCase()
     });
-    setMensagem('Usuário cadastrado com sucesso!');
+    toast.success('Usuário cadastrado com sucesso!');
     setTimeout(() => {
       window.location.href = '/login';
     }, 1500);
   } catch (error) {
     console.error(error);
-    setMensagem('Erro ao cadastrar usuário');
+    toast.error("Erro ao cadastrar usuário!");
   }
 };
 
@@ -80,7 +80,6 @@ function Cadastro() {
                 >
                     CADASTRAR
                 </button>
-                {mensagem && <p>{mensagem}</p>}
                 <p className='link-cadastro'>
                     JÁ TEM CONTA? <a href='/login'>FAÇA LOGIN</a>
                 </p>

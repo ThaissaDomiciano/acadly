@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './Login.css';  
 import './Styles.css';
 import Image from '../assets/img-login.svg';  
@@ -25,7 +26,7 @@ function Login({ onLogin }) {
         onLogin(usuario);
         setUsuarioLogado(usuario); 
       } else {
-        setErro('E-mail ou senha inválidos');
+        toast.error("E-mail ou senha incorretos!");  
       }
     } catch (error) {
       console.error(error);

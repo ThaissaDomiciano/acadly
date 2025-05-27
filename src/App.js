@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { gapi } from 'gapi-script';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 import Login from './pages/Login';
@@ -181,6 +183,7 @@ function App() {
           </PrivateRoute>
         } />
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 }
