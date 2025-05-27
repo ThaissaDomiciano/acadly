@@ -1,5 +1,5 @@
 // IMPORTS
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import AtividadeFormBase from '../../components/AtividadeFormBase';
 import BotaoSair from '../../components/BotaoSair';

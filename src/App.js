@@ -58,75 +58,75 @@ function App() {
   };
 
   const onVincular = useCallback(async () => {
-    try {
-      const auth = gapi.auth2.getAuthInstance();
-      await auth.signIn();
+  try {
+    const auth = gapi.auth2.getAuthInstance();
+    await auth.signIn();
 
-      const idUsuario = usuario?.id;
-      const tipo = usuario?.tipo;
+    const idUsuario = usuario?.id;
+    const tipo = usuario?.tipo;
 
-      let idsTurmas = [];
+    let idsTurmas = [];
 
-      if (tipo === 'ALUNO') {
-        const res = await axios.get(`http://localhost:8080/aluno-turma/aluno/${idUsuario}`);
-        const turma = res.data[0]?.turma;
-        if (turma) idsTurmas = [turma.id];
-      } else if (tipo === 'PROFESSOR') {
-        const res = await axios.get(`http://localhost:8080/turmas/professor/${idUsuario}`);
-        idsTurmas = res.data.map((turma) => turma.id);
-      }
-
-      if (idsTurmas.length === 0) {
-        alert("Nenhuma turma encontrada.");
-        return;
-      }
-
-      let totalEventos = 0;
-
-      for (const idTurma of idsTurmas) {
-        const tarefasRes = await axios.get(`http://localhost:8080/tarefas/turma/${idTurma}`);
-        const tarefas = tarefasRes.data;
-
-        tarefas.forEach((tarefa) => {
-          const dataInicio = new Date(`${tarefa.dataEntrega}T09:00:00-03:00`);
-          const dataFim = new Date(dataInicio);
-          dataFim.setHours(dataInicio.getHours() + 1);
-
-          const evento = {
-            summary: tarefa.titulo,
-            description: tarefa.descricao,
-            start: {
-              dateTime: dataInicio.toISOString(),
-              timeZone: 'America/Sao_Paulo',
-            },
-            end: {
-              dateTime: dataFim.toISOString(),
-              timeZone: 'America/Sao_Paulo',
-            },
-          };
-
-          gapi.client.calendar.events.insert({
-            calendarId: 'primary',
-            resource: evento,
-          }).then((res) => {
-            console.log('Evento criado:', res.result);
-          });
-
-          totalEventos++;
-        });
-      }
-
-      if (totalEventos === 0) {
-        alert("Nenhuma tarefa encontrada para vincular.");
-      } else {
-        alert(`${totalEventos} tarefas vinculadas ao Google Calendar com sucesso!`);
-      }
-
-    } catch (err) {
-      console.error('Erro ao vincular tarefas:', err);
-      alert('Erro ao vincular tarefas. Veja o console.');
+    if (tipo === 'ALUNO') {
+      const res = await axios.get(`http://localhost:8080/aluno-turma/aluno/${idUsuario}`);
+      const turma = res.data[0]?.turma;
+      if (turma) idsTurmas = [turma.id];
+    } else if (tipo === 'PROFESSOR') {
+      const res = await axios.get(`http://localhost:8080/turmas/professor/${idUsuario}`);
+      idsTurmas = res.data.map((turma) => turma.id);
     }
-  }, [usuario]);
+
+    if (idsTurmas.length === 0) {
+      alert("Nenhuma turma encontrada.");
+      return;
+    }
+
+    let totalEventos = 0;
+
+    for (const idTurma of idsTurmas) {
+      const tarefasRes = await axios.get(`http://localhost:8080/tarefas/turma/${idTurma}`);
+      const tarefas = tarefasRes.data;
+
+      const promises = tarefas.map((tarefa) => {
+        const dataInicio = new Date(`${tarefa.dataEntrega}T09:00:00-03:00`);
+        const dataFim = new Date(dataInicio);
+        dataFim.setHours(dataInicio.getHours() + 1);
+
+        const evento = {
+          summary: tarefa.titulo,
+          description: tarefa.descricao,
+          start: {
+            dateTime: dataInicio.toISOString(),
+            timeZone: 'America/Sao_Paulo',
+          },
+          end: {
+            dateTime: dataFim.toISOString(),
+            timeZone: 'America/Sao_Paulo',
+          },
+        };
+
+        return gapi.client.calendar.events.insert({
+          calendarId: 'primary',
+          resource: evento,
+        });
+      });
+
+      const resultados = await Promise.all(promises);
+      totalEventos += resultados.length;
+    }
+
+    if (totalEventos === 0) {
+      alert("Nenhuma tarefa encontrada para vincular.");
+    } else {
+      alert(`${totalEventos} tarefas vinculadas ao Google Calendar com sucesso!`);
+    }
+
+  } catch (err) {
+    console.error('Erro ao vincular tarefas:', err);
+    alert('Erro ao vincular tarefas. Veja o console.');
+  }
+}, [usuario]);
+
 
   if (usuario === undefined) {
     return <div style={{ textAlign: 'center', marginTop: '30vh', fontSize: '1.5rem' }}>Carregando...</div>;
@@ -139,7 +139,6 @@ function App() {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/cadastro" element={<Cadastro />} />
 
-        {/* Rotas do PROFESSOR */}
         <Route path="/homeProfessor" element={
           <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
             <HomeProfessor usuario={usuario} onLogout={handleLogout} onVincular={onVincular} />
@@ -161,7 +160,6 @@ function App() {
           </PrivateRoute>
         } />
 
-        {/* Rotas do ALUNO */}
         <Route path="/homeAluno" element={
           <PrivateRoute user={usuario} allowed={['ALUNO']}>
             <HomeAluno usuario={usuario} onLogout={handleLogout} onVincular={onVincular} />

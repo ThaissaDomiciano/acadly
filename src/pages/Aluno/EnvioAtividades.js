@@ -11,7 +11,7 @@ const EnvioAtividades = () => {
   const navigate = useNavigate();
   const { atividade, turma, usuario } = location.state || {};
 
-  const handleEnviar = async (formData) => {
+  const handleEnviar = async () => {
     try {
       const linkEntrega = `https://meusite.com/uploads/${pdfAluno.name}`;
 

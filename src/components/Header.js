@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
-const Header = ({ links = [], onVincular, nomeUsuario }) => {
+const Header = ({ links = [], onVincular }) => {
     const [menuAberto, setMenuAberto] = useState(false);
     const navigate = useNavigate(); 
 
