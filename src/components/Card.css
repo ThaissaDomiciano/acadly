@@ -37,7 +37,8 @@
 .linha-separadora {
     height: 1px;
     background-color: var(--cor-divisor);
-    margin: 8px 0;
+    margin: 8px;
+    margin-bottom: 20px;
     width: 100%;
 }
 
@@ -69,5 +70,67 @@
     padding: 8px 16px;
     border-radius: 8px;
     transition: background-color 0.3s ease;
+}
+
+.input-edicao {
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-salvar,
+.btn-cancelar,
+.btn-editar,
+.btn-excluir {
+  margin: 4px 8px 0 0;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.acoes-icones,
+.edicao-icones {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.acoes-icones svg,
+.edicao-icones svg {
+  cursor: pointer;
+  color: #999999; 
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.acoes-icones svg:hover,
+.edicao-icones svg:hover {
+  color: #555555; 
+}
+
+.edicao-icones {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.icone-editar:hover {
+  color: #555555;
+}
+
+.acoes-icones span:hover {
+  color: #555555;
+}
+
+.texto-editar {
+  color: var(--cor-clara);
+  font-size: 14px;
 }
 

@@ -22,7 +22,7 @@ const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
       const turmasFormatadas = res.data.map(turma => ({
         titulo: turma.nomeMateria,
         professor: usuario.nome,
-        turmaOriginal: turma, 
+        turmaOriginal: turma,
       }));
       setTurmas(turmasFormatadas);
     } catch (err) {
@@ -45,6 +45,30 @@ const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
     }
   };
 
+  const editarTurma = async (id, novoNome) => {
+    try {
+      await axios.put(`http://localhost:8080/turmas/${id}`, {
+        nomeMateria: novoNome,
+        professor: { id: usuario.id }
+      });
+      buscarTurmas();
+    } catch (error) {
+      console.error("Erro ao editar turma:", error);
+    }
+  };
+
+  const excluirTurma = async (id) => {
+    console.log('Excluir turma chamada com id:', id);
+    if (!window.confirm("Tem certeza que deseja excluir essa turma?")) return;
+    try {
+      await axios.delete(`http://localhost:8080/turmas/${id}`);
+      console.log('Turma excluída com sucesso');
+      buscarTurmas();
+    } catch (error) {
+      console.error("Erro ao excluir turma:", error);
+    }
+  };
+
   useEffect(() => {
     buscarTurmas();
   }, [buscarTurmas]);
@@ -53,14 +77,14 @@ const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
 
   return (
     <div className="container-professor">
-     <Header
+      <Header
         links={linksProfessor}
         nomeUsuario={usuario.nome}
         onLogout={onLogout}
         onVincular={onVincular}
       />
       <img src={Banner} alt="Banner" className="banner" />
-        <h3 className="titulo-professor">CRIAR NOVA TURMA</h3>
+      <h3 className="titulo-professor">CRIAR NOVA TURMA</h3>
       <div className="criar-turma-box">
         <div className="criar-turma-form">
           <label htmlFor="nomeTurma" className="label-turma">NOME DA TURMA:</label>
@@ -81,16 +105,19 @@ const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
       <h2 className="titulo-professor">TURMAS CRIADAS</h2>
       <div className="turmas-container">
         {turmas.map((turma, index) => (
-         <Card
+          <Card
             key={index}
             titulo={turma.titulo}
             professor={turma.professor}
+            isProfessor={true}
+            onEditar={(novoNome) => editarTurma(turma.turmaOriginal.id, novoNome)}
+            onExcluir={() => excluirTurma(turma.turmaOriginal.id)}
             botoes={[
               {
                 label: 'ANÁLISE',
                 className: 'botao-sala',
-                onClick: () => navigate('/analise', { state: { turma: turma.turmaOriginal } })
-              }
+                onClick: () => navigate('/analise', { state: { turma: turma.turmaOriginal } }),
+              },
             ]}
           />
         ))}

@@ -36,7 +36,7 @@ const AtividadeFormBase = ({
                 value={turma}
                 onChange={(e) => setTurmaSelecionada(e.target.value)}
               >
-                <option value="">Selecione uma turma</option>
+                <option value="">SELECIONE</option>
                 {turmas.map((t) => (
                   <option key={t.id} value={t.id}>{t.nomeMateria}</option>
                 ))}
