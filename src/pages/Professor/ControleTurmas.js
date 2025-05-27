@@ -2,7 +2,7 @@ import './ControleTurmas.css';
 import Header from '../../components/Header';
 import BotaoSair from '../../components/BotaoSair';
 import { useEffect, useState, useCallback } from 'react';
-import { FaChevronDown, FaChevronUp, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
 const ControleTurmas = () => {
@@ -85,25 +85,28 @@ const ControleTurmas = () => {
     }
   };
 
-  const excluirAluno = async (turmaIndex, alunoId) => {
-    const confirmar = window.confirm("Deseja remover este aluno da turma?");
-    if (!confirmar) return;
+ const excluirAluno = async (turmaIndex, alunoId) => {
+  const confirmar = window.confirm("Deseja remover este aluno da turma?");
+  if (!confirmar) return;
 
-    try {
-      const turma = turmas[turmaIndex];
-      await axios.delete(`http://localhost:8080/aluno-turma`, {
-        data: {
-          aluno: { id: alunoId },
-          turma: { id: turma.id }
-        }
-      });
+  try {
+    const turma = turmas[turmaIndex];
+    const relacao = turma.alunos.find(rel => rel.aluno.id === alunoId);
 
-      await buscarTurmas();
-    } catch (error) {
-      console.error('Erro ao remover aluno:', error);
-      setMensagem('Erro ao remover aluno da turma.');
+    if (!relacao || !relacao.id) {
+      setMensagem('Vínculo do aluno com a turma não encontrado.');
+      return;
     }
-  };
+
+    await axios.delete(`http://localhost:8080/aluno-turma/${relacao.id}`);
+
+    await buscarTurmas(); 
+    setMensagem('Aluno removido da turma com sucesso.');
+  } catch (error) {
+    console.error('Erro ao remover aluno:', error);
+    setMensagem('Erro ao remover aluno da turma.');
+  }
+};
 
   const linksProfessor = [
     { to: '/homeProfessor', label: 'INÍCIO' },
@@ -168,9 +171,6 @@ const ControleTurmas = () => {
                       <span>{relacao.aluno.nome}</span>
                       <span>{relacao.aluno.email}</span>
                       <span className="acoes">
-                        <button className="btn-editar" onClick={() => alert("Edição apenas visual por enquanto.")}>
-                          <FaEdit />
-                        </button>
                         <button className="btn-excluir" onClick={() => excluirAluno(index, relacao.aluno.id)}>
                           <FaTrash />
                         </button>

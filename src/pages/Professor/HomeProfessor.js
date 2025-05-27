@@ -6,7 +6,7 @@ import Header from '../../components/Header';
 import Banner from '../../assets/banner-professor.svg';
 import axios from 'axios';
 
-const HomeProfessor = ({ usuario, onLogout }) => {
+const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
   const [turmas, setTurmas] = useState([]);
   const [novaTurma, setNovaTurma] = useState('');
 
@@ -53,7 +53,12 @@ const HomeProfessor = ({ usuario, onLogout }) => {
 
   return (
     <div className="container-professor">
-      <Header links={linksProfessor} nomeUsuario={usuario.nome} onLogout={onLogout} />
+     <Header
+        links={linksProfessor}
+        nomeUsuario={usuario.nome}
+        onLogout={onLogout}
+        onVincular={onVincular}
+      />
       <img src={Banner} alt="Banner" className="banner" />
         <h3 className="titulo-professor">CRIAR NOVA TURMA</h3>
       <div className="criar-turma-box">

@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 import Banner from '../../assets/banner-aluno.svg';
 import axios from 'axios';
 
-const HomeAluno = ({ usuario, onLogout }) => {
+const HomeAluno = ({ usuario, onLogout, onVincular }) => {
   const [turmas, setTurmas] = useState([]);
   const inicioRef = useRef(null);
   const turmasRef = useRef(null);
@@ -17,7 +17,6 @@ const HomeAluno = ({ usuario, onLogout }) => {
   useEffect(() => {
     axios.get(`http://localhost:8080/aluno-turma/aluno/${usuario.id}`)
       .then(res => {
-        // Agora mantém o objeto completo da turma
         const turmasFormatadas = res.data.map(item => item.turma);
         setTurmas(turmasFormatadas);
       })
@@ -34,7 +33,12 @@ const HomeAluno = ({ usuario, onLogout }) => {
 
   return (
     <div className="container-aluno">
-      <Header links={linksAluno} nomeUsuario={usuario.nome} onLogout={onLogout} />
+      <Header
+        links={linksAluno}
+        nomeUsuario={usuario.nome}
+        onLogout={onLogout}
+        onVincular={onVincular}
+      />
 
       <section ref={inicioRef}>
         <img src={Banner} alt="Banner" className="banner" />
@@ -55,8 +59,8 @@ const HomeAluno = ({ usuario, onLogout }) => {
                   onClick: () =>
                     navigate('/atividades', {
                       state: {
-                        turma,    // envia o objeto completo
-                        usuario   // envia o aluno logado
+                        turma,    
+                        usuario   
                       }
                     })
                 }
