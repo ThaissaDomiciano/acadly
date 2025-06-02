@@ -1,4 +1,3 @@
-// IMPORTS
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import AtividadeFormBase from '../../components/AtividadeFormBase';
