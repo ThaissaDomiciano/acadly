@@ -14,12 +14,22 @@ const CadastroAtividade = () => {
   useEffect(() => {
     const buscarTurmas = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/turmas');
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        const idProfessor = usuario?.id; // ou `usuario.professor.id` se estiver aninhado
+
+        if (!idProfessor) {
+          toast.error("Professor não identificado.");
+          return;
+        }
+
+        const response = await axios.get(`http://localhost:8080/turmas/professor/${idProfessor}`);
         setTurmas(response.data);
       } catch (error) {
         console.error('Erro ao buscar turmas:', error);
+        toast.error('Erro ao buscar turmas do professor');
       }
     };
+
     buscarTurmas();
   }, []);
 

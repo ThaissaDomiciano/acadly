@@ -25,15 +25,32 @@
 }
 
 .link-header {
-    text-decoration: none;
-    color: var(--cor-primaria);
-    font-weight: bold;
-    font-size: 16px;
-    margin-right: 12px;
+  text-decoration: none;
+  color: var(--cor-primaria);
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 12px;
+  position: relative; 
+}
+
+.link-header::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: var(--cor-secundaria);
+  transition: 0.3s;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
 }
 
 .link-header:hover {
-    color: var(--cor-secundaria);
+  color: var(--cor-secundaria);
+}
+
+.link-header:hover::after {
+  width: 100%;
 }
 
 .perfil-wrapper {
