@@ -6,7 +6,7 @@ const BotaoSair = ({tipo}) => {
     return (
         <button className="btn-voltar" onClick={() => window.location.href = rota}>
                 <FaSignOutAlt style={{ marginRight: '8px' }} />
-                        SAIR
+                        VOLTAR
             </button>
     )
 } 
