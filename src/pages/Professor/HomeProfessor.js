@@ -4,6 +4,7 @@ import Card from "../../components/Card";
 import './HomeProfessor.css';
 import Header from '../../components/Header';
 import Banner from '../../assets/banner-professor.svg';
+import { MdEmail } from 'react-icons/md';
 import axios from 'axios';
 
 const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
@@ -103,6 +104,18 @@ const HomeProfessor = ({ usuario, onLogout, onVincular }) => {
       </div>
 
       <h2 className="titulo-professor">TURMAS CRIADAS</h2>
+      <div className="botao-notificacao">
+    <button
+      onClick={() => navigate('/notificacoes')}
+      className="btn-chat-notificacao"
+      title="Notificações"
+    >
+      <MdEmail size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
+      <span className="btn-chat-label">ENVIAR NOTIFICAÇÃO</span>
+    </button>
+
+
+    </div>
       <div className="turmas-container">
         {turmas.map((turma, index) => (
           <Card

@@ -11,11 +11,14 @@ import HomeProfessor from './pages/Professor/HomeProfessor';
 import HomeAluno from './pages/Aluno/HomeAluno';
 import CadastroAtividade from './pages/Professor/CadastroAtividade';
 import ControleTurmas from './pages/Professor/ControleTurmas';
+import NotificacoesProfessor from './pages/Professor/NotificacoesProfessor';
 import Analise from './pages/Professor/Analise';
 import Atividades from './pages/Aluno/Atividades';
+import NotificacoesAluno from './pages/Aluno/NotificacoesAluno';
 import EnvioAtividades from './pages/Aluno/EnvioAtividades';
 import Notas from './pages/Aluno/Notas';
 import PrivateRoute from './components/PrivateRoute';
+
 
 function App() {
   const [usuario, setUsuario] = useState(undefined);
@@ -162,6 +165,13 @@ function App() {
           </PrivateRoute>
         } />
 
+        <Route path="/notificacoes" element={
+          <PrivateRoute user={usuario} allowed={['PROFESSOR']}>
+            <NotificacoesProfessor usuario={usuario} onLogout={handleLogout} />
+          </PrivateRoute>
+        } />
+
+
         <Route path="/homeAluno" element={
           <PrivateRoute user={usuario} allowed={['ALUNO']}>
             <HomeAluno usuario={usuario} onLogout={handleLogout} onVincular={onVincular} />
@@ -182,7 +192,12 @@ function App() {
             <Notas />
           </PrivateRoute>
         } />
-      </Routes>
+        <Route path="/notificacoes-aluno" element={
+          <PrivateRoute user={usuario} allowed={['ALUNO']}>
+            <NotificacoesAluno usuario={usuario} onLogout={handleLogout} onVincular={onVincular} />
+          </PrivateRoute>
+        } />
+              </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );

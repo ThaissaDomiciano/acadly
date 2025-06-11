@@ -42,6 +42,14 @@ const HomeAluno = ({ usuario, onLogout, onVincular }) => {
 
       <section ref={inicioRef}>
         <img src={Banner} alt="Banner" className="banner" />
+        <div style={{ textAlign: 'center', margin: '20px' }}>
+        <button
+          onClick={() => navigate('/notificacoes-aluno')}
+          className="btn-notificacoes"
+        >
+          VER NOTIFICAÇÕES
+        </button>
+      </div>
       </section>
 
       <section ref={turmasRef}>
