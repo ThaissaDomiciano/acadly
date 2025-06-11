@@ -14,25 +14,25 @@ function Login({ onLogin }) {
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8080/usuarios`);
-      const usuarios = response.data;
+ const handleLogin = async () => {
+  try {
+    const response = await axios.post('http://localhost:8080/auth/login', {
+      email,
+      senha
+    });
 
-      const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+    const { usuario } = response.data;
 
-      if (usuario) {
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        onLogin(usuario);
-        setUsuarioLogado(usuario); 
-      } else {
-        toast.error("E-mail ou senha incorretos!");  
-      }
-    } catch (error) {
-      console.error(error);
-      setErro('Erro ao conectar com o servidor');
-    }
-  };
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+    onLogin(usuario);
+    setUsuarioLogado(usuario);
+  } catch (error) {
+    console.error(error); //
+    setErro('Erro ao conectar com o servidor');
+    toast.error("E-mail ou senha inválidos!");
+  }
+};
+
 
   useEffect(() => {
     if (usuarioLogado) {
