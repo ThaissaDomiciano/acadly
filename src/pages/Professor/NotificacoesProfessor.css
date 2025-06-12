@@ -16,6 +16,7 @@
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 32px;
+  margin: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
@@ -41,6 +42,7 @@
 .lista-notificacoes {
   list-style: none;
   padding: 0;
+  margin: 20px;
 }
 
 .lista-notificacoes li {
