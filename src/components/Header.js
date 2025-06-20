@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { FaUserCircle, FaSignOutAlt, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
-const Header = ({ links = [], onVincular }) => {
+const Header = ({ links = [], onVincular, onLogout }) => {
     const [menuAberto, setMenuAberto] = useState(false);
     const [nomeUsuario, setNomeUsuario] = useState('MEU PERFIL');
     const navigate = useNavigate(); 
@@ -23,7 +23,7 @@ const Header = ({ links = [], onVincular }) => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('authData'); 
+        onLogout(); 
         navigate('/login'); 
     };
 
